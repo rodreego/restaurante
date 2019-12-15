@@ -50,17 +50,22 @@ router.get('/reservations', function(req,res,next){
 router.post('/reservations', function(req,res,next){
 
   if(!req.body.name){
-    res.send("Digite o nome")
+    reservations.render(req,res,"Digite o nome!")    
   } else if(!req.body.email){
-    res.send("Digite o email")
+    reservations.render(req,res,"Digite o endereço de e-mail!")
   } else if(!req.body.people){
-    res.send("Selecione o número de pessoas")
+    reservations.render(req,res,"Informe o número de pessoas!")
   } else if(!req.body.date){
-    res.send("Selecione a data")
+    reservations.render(req,res,"Escolha uma data!")
   } else if(!req.body.time){
-    res.send("Selecione a hora")
+    reservations.render(req,res,"Escolha um horário!")
   } else{
-    res.send(req.body)
+    reservations.save(req.body).then(results=>{
+        req.body = {}
+        reservations.render(req,res,null,"Reserva realizada com sucesso!")
+    }).catch(err=>{
+        reservations.render(req,res,err.message)
+    })
   }
 
 });
