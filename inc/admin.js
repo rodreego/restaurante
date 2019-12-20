@@ -1,5 +1,13 @@
 module.exports = {
 
+    getParams(req,params){
+
+        return Object.assign({},{
+            menus: req.menus,
+            user: req.session.user
+        }, params)
+    },
+
     getMenus(req) {
 
         let menus = [
@@ -20,7 +28,7 @@ module.exports = {
             {
                 text: "Reservas",
                 href: "/admin/reservations",
-                icon: "calender-check-o",
+                icon: "calendar-check-o",
                 active: false
             },
 
