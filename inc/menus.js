@@ -2,27 +2,27 @@ let conn = require('./db')
 let path = require('path')
 
 module.exports = {
-    getMenus(){
+    getMenus() {
 
-        return new Promise((resolve,reject)=>{
-            
+        return new Promise((resolve, reject) => {
+
             conn.query(
                 `SELECT * FROM tb_menus ORDER by title
-                `,(err,results)=>{
+                `, (err, results) => {
 
-                   if(err){
-                       reject(err);
-                   }
+                if (err) {
+                    reject(err);
+                }
 
-                   resolve(results);
+                resolve(results);
             });
 
         });
     },
 
-    save(fields,files){
+    save(fields, files) {
 
-        return new Promise((resolve,reject)=>{
+        return new Promise((resolve, reject) => {
 
 
             fields.photo = `images/${path.parse(files.photo.path).base}`
@@ -33,7 +33,7 @@ module.exports = {
                 fields.price
             ]
 
-            if(files.photo.name){
+            if (files.photo.name) {
 
                 queryPhoto = ',photo= ?';
 
@@ -41,11 +41,11 @@ module.exports = {
 
             }
 
-            if(parseInt(fields.id) > 0){
+            if (parseInt(fields.id) > 0) {
 
                 params.push(fields.id);
 
-                query=`
+                query = `
                     UPDATE tb_menus
                     SET title = ?,
                         description = ?,
@@ -53,25 +53,25 @@ module.exports = {
                         ${queryPhoto}
                     WHERE id = ?
                 `;
-                
 
-            }else{
 
-                if(!files.photo.name){
+            } else {
+
+                if (!files.photo.name) {
                     reject('Envie a foto do prato')
-                    
+
                 }
 
                 query = `
                 INSERT INTO tb_menus (title, description, price, photo)
                 VALUES(?,?,?,?)
-                `;               
+                `;
             }
 
-            conn.query(query,params,(err,results)=>{
-                if(err){
+            conn.query(query, params, (err, results) => {
+                if (err) {
                     reject(err)
-                }else{
+                } else {
                     resolve(results)
                 }
             })
@@ -79,18 +79,18 @@ module.exports = {
     },
 
 
-    delete(id){
+    delete(id) {
 
-        return new Promise((resolve,reject)=>{
+        return new Promise((resolve, reject) => {
 
             conn.query(`
                 DELETE FROM tb_menus WHERE id = ? 
-            `,[
+            `, [
                 id
-            ], (err,results)=>{
-                if(err){
+            ], (err, results) => {
+                if (err) {
                     reject(err)
-                }else{
+                } else {
                     resolve(results)
                 }
             })
