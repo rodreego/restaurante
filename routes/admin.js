@@ -152,6 +152,19 @@ router.get("/users",function(req,res,next){
     
 });
 
+router.post("/users",function(req,res,next){
+
+    users.save()
+
+    res.render("admin/menus",admin.getParams(req))
+    
+});
+
+router.delete("/users/:id",function(req,res,next){
+
+    res.render("admin/menus",admin.getParams(req))
+    
+});
 
 
 module.exports = router;
