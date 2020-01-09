@@ -38,8 +38,8 @@
                         <td><%= row.name %></td>
                         <td><%= row.email %></td>
                         <td>
-                            <button type="button" class="btn btn-xs btn-info btn-update" ><i class="fa fa-pencil"></i> Editar</button>&nbsp;
-                            <button type="button" class="btn btn-xs btn-warning btn-update" data-toggle="modal" data-target="#modal-update-password">
+                            <button type="button" class="btn btn-xs btn-info btn-update"><i class="fa fa-pencil"></i> Editar</button>&nbsp;
+                            <button type="button" class="btn btn-xs btn-warning">
                                 <i class="fa fa-lock"></i> Alterar Senha</button>&nbsp;
                             <button type="button" class="btn btn-xs btn-danger btn-delete"><i class="fa fa-trash"></i> Excluir</button></td>
                     </tr>
@@ -162,6 +162,25 @@
 
   new HcodeGrid({
     deleteUrl:'/admin/users/${data.id}',
-    deleteMsg:'Deseja realmente excluir o usuário ${data.name}?'
-  })
+    deleteMsg:'Deseja realmente excluir o usuário ${data.name}?',
+    listerners:{
+      buttonClick:(btn,data,e)=>{
+        
+        $("#modal-update-password").modal("show");
+        
+      }
+    }
+  });
+
+  document.querySelector("#modal-update-password form").save().then(results=>{
+
+    window.location.reload()
+
+  }).catch(err=>{
+
+    alert('não foi possível alterar a senha');
+
+  });
+
+
 </script>
