@@ -136,6 +136,7 @@ router.post("/reservations", function(req,res,next){
 
 });
 
+
 router.delete("/reservations/:id",function(req,res,next){
 
     reservations.delete(req.params.id).then(results=>{
@@ -170,6 +171,22 @@ router.post("/users",function(req,res,next){
     })    
     
 });
+
+router.post("admin/users/passsword-change",function(req,res,next){
+
+    users.changePassword(req).then(results=>{
+
+        res.send(results)
+
+    }).catch(err=>{
+
+        res.send({
+            error: err
+        })
+
+    })
+
+})
 
 router.delete("/users/:id",function(req,res,next){
 
