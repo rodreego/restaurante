@@ -4,94 +4,95 @@ var menus = require('./../inc/menus')
 var reservations = require('./../inc/reservations')
 var contacts = require('./../inc/contacts')
 var router = express.Router();
+var emails = require('./../inc/emails')
 
 /* GET home page. */
 
-router.get('/', function(req,res,next){
-  menus.getMenus().then(results=>{
-    res.render('index',{
+router.get('/', function (req, res, next) {
+  menus.getMenus().then(results => {
+    res.render('index', {
       title: 'Restaurante Saboroso!',
       menus: results,
       isHome: true
     })
   })
-}) 
+})
 
-router.get('/contacts', function(req,res,next){
+router.get('/contacts', function (req, res, next) {
 
-  contacts.render(req,res)
+  contacts.render(req, res)
 
 });
 
-router.post('/contacts', function(req,res,next){
-  
-  if(!req.body.name){
-    contacts.render(req,res,'digite o nome!')
-  }else if(!req.body.email){
-    contacts.render(req,res,'digite o e-mail!')
-  }else if(!req.body.message){
-    contacts.render(req,res,'digite a mensagem')
-  }else{
-    contacts.save(req.body).then(results=>{
+router.post('/contacts', function (req, res, next) {
+
+  if (!req.body.name) {
+    contacts.render(req, res, 'digite o nome!')
+  } else if (!req.body.email) {
+    contacts.render(req, res, 'digite o e-mail!')
+  } else if (!req.body.message) {
+    contacts.render(req, res, 'digite a mensagem')
+  } else {
+    contacts.save(req.body).then(results => {
 
       req.body = {};
 
-      contacts.render(req,res,null,"contatato enviado com sucesso!")
+      contacts.render(req, res, null, "contatato enviado com sucesso!")
 
-    }).catch(err=>{
+    }).catch(err => {
 
-      contacts.render(res,req,err.message)
+      contacts.render(res, req, err.message)
 
     })
   }
 
 });
 
-router.get('/menus', function(req,res,next){
+router.get('/menus', function (req, res, next) {
 
-  menus.getMenus().then(results=>{
+  menus.getMenus().then(results => {
 
     res.render('menus', {
       title: 'Menus - Restaurante Saboroso! ',
       background: 'images/img_bg_1.jpg',
       h1: 'Saboreie nosso menu!',
-      menus: results    
+      menus: results
     });
 
-  }); 
+  });
 
 });
 
-router.get('/reservations', function(req,res,next){
+router.get('/reservations', function (req, res, next) {
 
-  reservations.render(req,res)
+  reservations.render(req, res)
 
 });
 
-router.post('/reservations', function(req,res,next){
+router.post('/reservations', function (req, res, next) {
 
-  if(!req.body.name){
-    reservations.render(req,res,"Digite o nome!")    
-  } else if(!req.body.email){
-    reservations.render(req,res,"Digite o endereço de e-mail!")
-  } else if(!req.body.people){
-    reservations.render(req,res,"Informe o número de pessoas!")
-  } else if(!req.body.date){
-    reservations.render(req,res,"Escolha uma data!")
-  } else if(!req.body.time){
-    reservations.render(req,res,"Escolha um horário!")
-  } else{
-    reservations.save(req.body).then(results=>{
-        req.body = {}
-        reservations.render(req,res,null,"Reserva realizada com sucesso!")
-    }).catch(err=>{
-        reservations.render(req,res,err.message)
+  if (!req.body.name) {
+    reservations.render(req, res, "Digite o nome!")
+  } else if (!req.body.email) {
+    reservations.render(req, res, "Digite o endereço de e-mail!")
+  } else if (!req.body.people) {
+    reservations.render(req, res, "Informe o número de pessoas!")
+  } else if (!req.body.date) {
+    reservations.render(req, res, "Escolha uma data!")
+  } else if (!req.body.time) {
+    reservations.render(req, res, "Escolha um horário!")
+  } else {
+    reservations.save(req.body).then(results => {
+      req.body = {}
+      reservations.render(req, res, null, "Reserva realizada com sucesso!")
+    }).catch(err => {
+      reservations.render(req, res, err.message)
     })
   }
 
 });
 
-router.get('/services', function(req,res,next){
+router.get('/services', function (req, res, next) {
 
   res.render('services', {
     title: 'Serviços - Restaurante Saboroso! ',
@@ -100,6 +101,18 @@ router.get('/services', function(req,res,next){
   });
 
 });
+
+router.post('/subscribe', function (req, res, next) {
+
+  emails.save(req).then(results => {
+
+    res.send(results)
+
+  }).catch(err => {
+    res.send(err)
+  })
+
+})
 
 module.exports = router
 
