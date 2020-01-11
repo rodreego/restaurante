@@ -1,12 +1,12 @@
 HTMLFormElement.prototype.save = function (config) {
 
-  let form = this
+  let form = this;
 
   form.addEventListener('submit', e => {
 
     e.preventDefault()
 
-    let formData = new FormData(form)
+    let formData = new FormData(form);
 
     fetch(form.action, {
       method: form.method,
@@ -16,16 +16,16 @@ HTMLFormElement.prototype.save = function (config) {
       .then(json => {
 
         if (json.error) {
-          if (typeof config.failure === 'funcion') config.failure(json.error)
+          if (typeof config.failure === 'function') config.failure(json.error)
         } else {
-          if (typeof config.success === 'funcion') config.success(json)
+          if (typeof config.success === 'function') config.success(json)
         }
 
 
 
       }).catch(err => {
 
-        if (typeof config.failure === 'funcion') config.failure(err)
+        if (typeof config.failure === 'function') config.failure(err)
 
       })
 

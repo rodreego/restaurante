@@ -172,7 +172,7 @@ router.post("/users",function(req,res,next){
     
 });
 
-router.post("admin/users/passsword-change",function(req,res,next){
+router.post("/users/password-change",function(req,res,next){
 
     users.changePassword(req).then(results=>{
 
