@@ -41,6 +41,8 @@ class Pagination {
                     this.totalPages = Math.ceil(this.total / this.itensPerPage)
                     this.currentPage++
 
+                    
+
                     resolve(this.data)
                 }
 
@@ -65,6 +67,17 @@ class Pagination {
     getTotalPages() {
 
         return this.totalPages
+
+    }
+
+    getNavigation(params){
+
+        let limitPagesNav = 5
+        let links = []
+        let nrstart = 0
+        let nrend = 0
+        
+        return links
 
     }
 
