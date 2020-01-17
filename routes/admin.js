@@ -47,6 +47,16 @@ router.get("/", function (req, res, next) {
 
 });
 
+router.get("/dashboard", function (req, res, next) {
+
+    reservations.dashboard().then(data => {
+
+        res.send(data)
+
+    });
+
+});
+
 router.post("/login", function (req, res, next) {
 
     if (!req.body.email) {
@@ -178,7 +188,7 @@ router.get("/reservations/chart", function (req, res, next) {
         res.send(chartData)
 
     });
-     
+
 });
 
 router.post("/reservations", function (req, res, next) {

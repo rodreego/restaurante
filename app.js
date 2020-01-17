@@ -5,6 +5,8 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var session = require("express-session")
 var formidable = require('formidable')
+var http = require('http')
+var socket = require('socket.io')
 var path = require('path')
 var RedisStore = require("connect-redis")(session)
 const redis = require('redis')
@@ -13,27 +15,41 @@ var indexRouter = require('./routes/index');
 var adminRouter = require('./routes/admin');
 var app = express();
 
-app.use(function(req,res,next){
+var http = http.Server(app)
 
-  if(req.method === 'POST'){
+var io = socket(http)
+
+io.on('connection', function (socket) {
+
+  console.log('novo usuário conectado')
+
+  io.emit('reservations update', {
+    date: new Date()
+  })
+
+})
+
+app.use(function (req, res, next) {
+
+  if (req.method === 'POST') {
 
     var form = formidable.IncomingForm({
       uploadDir: path.join(__dirname, "/public/images"),
       keepExtensions: true
     })
-  
-    form.parse(req,function(err, fields, files){
-      
+
+    form.parse(req, function (err, fields, files) {
+
       req.body = fields
       req.fields = fields
       req.files = files
-  
+
       next()
     })
-  }else{
+  } else {
     next()
-  } 
- 
+  }
+
 })
 
 // view engine setup
@@ -41,7 +57,7 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
 app.use(session({
-  store: new RedisStore({client}),
+  store: new RedisStore({ client }),
   secret: 'caralho',
   resave: false
 }))
@@ -56,12 +72,12 @@ app.use('/', indexRouter);
 app.use('/admin', adminRouter);
 
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
   next(createError(404));
 });
 
 // error handler
-app.use(function(err, req, res, next) {
+app.use(function (err, req, res, next) {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
@@ -71,4 +87,10 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
-module.exports = app;
+http.listen(3000, function () {
+
+  console.log('servidor em execução')
+
+})
+
+//module.exports = app;
