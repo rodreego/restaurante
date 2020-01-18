@@ -110,9 +110,9 @@
 
   let socket = io()
   
-  socket.on('reservations update', function(data){
+  socket.on('dashboard update', function(){
 
-    console.log("recebi o evento", data)
+    refreshDashboard()
 
   })
 

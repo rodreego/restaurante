@@ -11,8 +11,7 @@ var path = require('path')
 var RedisStore = require("connect-redis")(session)
 const redis = require('redis')
 let client = redis.createClient()
-var indexRouter = require('./routes/index');
-var adminRouter = require('./routes/admin');
+
 var app = express();
 
 var http = http.Server(app)
@@ -21,13 +20,12 @@ var io = socket(http)
 
 io.on('connection', function (socket) {
 
-  console.log('novo usuário conectado')
-
-  io.emit('reservations update', {
-    date: new Date()
-  })
+  console.log('novo usuário conectado')  
 
 })
+
+var indexRouter = require('./routes/index')(io);
+var adminRouter = require('./routes/admin')(io);
 
 app.use(function (req, res, next) {
 
